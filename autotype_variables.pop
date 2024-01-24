@@ -1,8 +1,0 @@
-# AutoType Variables Example: Currency Conversion
-
-def convert_to_euro(dollar_amount):
-    euro_rate = 0.92  // AutoType as float
-    return dollar_amount * euro_rate
-
-print(convert_to_euro(100))  // Automatically infers and converts types, output: 92.0
-

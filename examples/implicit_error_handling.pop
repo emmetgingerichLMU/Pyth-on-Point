@@ -1,0 +1,5 @@
+# Implicitly handles type conversion
+
+number_str = "8"
+print(number_str + 2)  // Implicitly handles type conversion, Output: 10
+

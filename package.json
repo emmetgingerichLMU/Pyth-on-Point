@@ -1,10 +1,10 @@
 {
   "name": "pyth-on-point",
   "version": "1.0.0",
-  "description": "",
+  "description": "In the vibrant tech hub of Silicon Shores, a team of visionary programmers created Pyth-On Point, a language that redefined coding. Drawing inspiration from Python's simplicity, Pyth-On Point introduced groundbreaking features like AutoType Variables for intuitive type inference, One-Liner Functions for succinct code, Enhanced List Comprehensions for powerful data manipulation, Smart Loops for pattern-optimized iterations, and Implicit Error Handling for seamless debugging. This language quickly gained acclaim for making programming more accessible, efficient, and elegant. Pyth-On Point didn't just change how people wrote code; it transformed how they approached programming, fostering a community that valued clarity and innovation, thereby democratizing the world of software development.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "c8 mocha"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +15,8 @@
   },
   "dependencies": {
     "ohm-js": "^17.1.0"
+  },
+  "directories": {
+    "example": "examples"
   }
 }

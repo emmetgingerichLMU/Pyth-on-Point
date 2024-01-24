@@ -1,0 +1,4 @@
+# Enhanced List Comprehensions Example
+data = [-5, 3, 10, -2, 0]
+positive_squared = [x * x for x in data if x > 0]
+print(positive_squared)  // Output: [9, 100]

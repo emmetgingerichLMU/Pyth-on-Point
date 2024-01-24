@@ -1,0 +1,6 @@
+# Fibonacci Series
+a, b = 0, 1
+for _ in range(0, 10): 
+    print(a)
+    a, b = b, a + b  // Smart loop understands the Fibonacci pattern
+// Output: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34

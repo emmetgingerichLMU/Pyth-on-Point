@@ -8,7 +8,7 @@
     "test": "c8 mocha"
   },
   "keywords": [],
-  "author": "",
+  "author": "Emmet Gingerich, Ari Kanev, Alex Gordon, Nico Meiswinkel",
   "license": "ISC",
   "devDependencies": {
     "c8": "^9.1.0",

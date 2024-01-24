@@ -30,3 +30,6 @@ intuitive, and even more user-friendly than Python.
 
 
 
+![DALL·E 2024-01-24 12 59 15 - Design a sleek and modern logo for a fictional programming language called 'Pyth-On Point'  The logo should visually represent the concept of being co](https://github.com/emmetgingerichLMU/Pyth-on-Point/assets/16505410/8e6b66bd-ca34-4ed7-b1e7-73bb6151add6)
+
+

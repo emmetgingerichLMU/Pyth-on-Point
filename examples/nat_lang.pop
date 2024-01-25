@@ -1,0 +1,10 @@
+# Natural Language Function Definitions Example: Weather Response
+
+define "if it's cold (temperature) then say to wear a jacket":
+    if temperature < 60:
+        return "Wear a jacket"
+    else:
+        return "It's warm enough"
+
+print("if it's cold (55) then say to wear a jacket")  # Output: "Wear a jacket"
+

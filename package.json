@@ -8,7 +8,7 @@
     "test": "c8 mocha"
   },
   "keywords": [],
-  "author": "Emmet Gingerich, Ari Kanev, Alex Gordon, Nico Meiswinkel",
+  "author": "Emmet Gingerich, Ari Kanevsky, Alex Gordon, Nico Meiswinkel",
   "license": "ISC",
   "devDependencies": {
     "c8": "^9.1.0",
@@ -18,6 +18,8 @@
     "ohm-js": "^17.1.0"
   },
   "directories": {
-    "example": "examples"
+    "doc": "docs",
+    "example": "examples",
+    "test": "test"
   }
 }

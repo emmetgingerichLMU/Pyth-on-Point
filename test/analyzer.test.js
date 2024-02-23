@@ -1,26 +1,84 @@
 import { expect } from "chai";
-import { analyzeSyntax } from "../src/analyzer.js";
+import Analyzer from "../src/analyzer.js";
 
 describe("Syntax Analysis Tests", () => {
-  it("detects AutoHealingStatement correctly", () => {
-    const code = "100/2";
-    expect(analyzeSyntax(code)).to.match(/AutoHealingStatement detected./);
+  let analyzer;
+
+  beforeEach(() => {
+    analyzer = new Analyzer();
   });
 
-  it("detects NaturalLanguageFunctionDefinition correctly", () => {
-    const code = 'define "createReport(date, temperature) then generateReport"';
-    expect(analyzeSyntax(code)).to.match(
-      /NaturalLanguageFunctionDefinition detected./
-    );
+  it("handles AutoHealingStatement with convertible types", () => {
+    const ast = {
+      type: "AutoHealingStatement",
+      left: { type: "Literal", value: "100", dataType: "string" },
+      right: { type: "Literal", value: 2, dataType: "number" },
+    };
+    expect(() => analyzer.visitAutoHealingStatement(ast)).not.to.throw();
   });
 
-  it("detects PredictiveLoop correctly", () => {
-    const code = 'for x in predictive_range(1, 10, pattern="prime") { log(x) }';
-    expect(analyzeSyntax(code)).to.match(/PredictiveLoop detected./);
+  it("throws on AutoHealingStatement with non-convertible types", () => {
+    const ast = {
+      type: "AutoHealingStatement",
+      left: { type: "Literal", value: "not a number", dataType: "string" },
+      right: { type: "Literal", value: 2, dataType: "number" },
+    };
+    expect(() => analyzer.visitAutoHealingStatement(ast)).to.throw();
   });
 
-  it("returns error for unknown statement", () => {
-    const code = "this is not a valid statement";
-    expect(analyzeSyntax(code)).to.match(/Unknown or invalid statement./);
+  it("validates NaturalLanguageFunctionDefinition without duplicate parameters", () => {
+    const ast = {
+      type: "NaturalLanguageFunctionDefinition",
+      parameters: [{ name: "temperature", dataType: "number" }],
+      body: [],
+    };
+    expect(() =>
+      analyzer.visitNaturalLanguageFunctionDefinition(ast)
+    ).not.to.throw();
   });
+
+  it("throws on NaturalLanguageFunctionDefinition with duplicate parameters", () => {
+    const ast = {
+      type: "NaturalLanguageFunctionDefinition",
+      parameters: [
+        { name: "temperature", dataType: "number" },
+        { name: "temperature", dataType: "number" },
+      ],
+      body: [],
+    };
+    expect(() =>
+      analyzer.visitNaturalLanguageFunctionDefinition(ast)
+    ).to.throw();
+  });
+
+  it("accepts valid PredictiveLoop", () => {
+    const ast = {
+      type: "PredictiveLoop",
+      start: { type: "Literal", value: 1, dataType: "number" },
+      end: { type: "Literal", value: 10, dataType: "number" },
+      pattern: { type: "Literal", value: "prime", dataType: "string" },
+      body: [],
+    };
+    expect(() => analyzer.visitPredictiveLoop(ast)).not.to.throw();
+  });
+
+  it("validates ComparisonStatement with compatible types", () => {
+    const ast = {
+      type: "ComparisonStatement",
+      left: { type: "Literal", value: 10, dataType: "number" },
+      right: { type: "Literal", value: 10, dataType: "number" },
+    };
+    expect(() => analyzer.visitComparisonStatement(ast)).not.to.throw();
+  });
+
+  it("throws on ComparisonStatement with incompatible types", () => {
+    const ast = {
+      type: "ComparisonStatement",
+      left: { type: "Literal", value: "10", dataType: "string" },
+      right: { type: "Literal", value: 10, dataType: "number" },
+    };
+    expect(() => analyzer.visitComparisonStatement(ast)).to.throw();
+  });
+
+  // Additional tests as needed for other features and edge cases
 });

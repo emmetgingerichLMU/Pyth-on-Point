@@ -297,8 +297,7 @@ export default function analyze(match) {
       _for,
       variable,
       _in,
-      predictiveRange,
-      _openP,
+      _predictiveRangeWithOpenP,
       rangeParams,
       _closeP,
       _openB,
@@ -306,10 +305,9 @@ export default function analyze(match) {
       _closeB
     ) {
       const varName = variable.sourceString;
-      const predRange = predictiveRange.rep();
       const rangePars = rangeParams.rep();
       const body = loopBody.rep();
-      return core.predictiveLoop(varName, predRange, rangePars, body);
+      return core.predictiveLoop(varName, rangePars, body);
     },
     ComparisonStatement(_compare, expression1, _to, expression2) {
       const expr1 = expression1.rep();
@@ -329,7 +327,13 @@ export default function analyze(match) {
       return core.yieldStatement(expr);
     },
     FunctionBody(statement) {
-      return statement.asIteration().children.map((s) => s.rep());
+      return statement.children.map((s) => s.rep());
+    },
+    LoopBody(statement) {
+      return statement.children.map((s) => s.rep());
+    },
+    RangeParams(start, _comma1, end, _comma2, patternType) {
+      return core.rangeParams(start.rep(), end.rep(), patternType.sourceString);
     },
     // Define representations for other constructs as necessary.
     // This includes mapping grammar rules for expressions and literals.

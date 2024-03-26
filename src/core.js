@@ -21,16 +21,10 @@ export function fun(name, type) {
   return { kind: "Function", name, type };
 }
 
-export function predictiveLoop(
-  variable,
-  predictiveRange,
-  rangeParams,
-  loopBody
-) {
+export function predictiveLoop(variable, rangeParams, loopBody) {
   return {
     kind: "PredictiveLoop",
     variable,
-    predictiveRange,
     rangeParams,
     loopBody,
   };
@@ -52,6 +46,10 @@ export function returnStatement(expression) {
 
 export function yieldStatement(expression) {
   return { kind: "YieldStatement", expression };
+}
+
+export function rangeParams(start, end, patternType) {
+  return { kind: "RangeParams", start, end, patternType };
 }
 
 export function variable(name) {

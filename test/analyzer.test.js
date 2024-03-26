@@ -20,7 +20,7 @@ const semanticChecks = [
     "natural language function definition",
     'define greet(name) then print "Hello " + name',
   ],
-  ["predictive loop", "for x in predictive_range(1, 10, prime) { print(x); }"],
+  ["predictive loop", "for x in predictive_range(1, 10, prime) { print(x) }"],
   ["comparison statement", "compare 1 to 2"],
   // Add more checks as needed for your language features
 ];
@@ -30,7 +30,7 @@ const semanticErrors = [
   ["undeclared variable in print", "print x", /Identifier x not declared/],
   [
     "misused natural language keyword",
-    'define greet 123 then print "Oops!"',
+    "define greet(name) then print nombre",
     /Expected a variable name/,
   ],
   [

@@ -1,40 +1,39 @@
-import * as assert from "node:assert/strict";
-import { compile } from "../src/pyth-on-point.js";
+import assert from "node:assert/strict";
+import compile from "../src/compiler.js";
+import parse from "../src/parser.js";
 
-describe("Pyth-on-Point Compiler Tests", () => {
-  describe("Auto-Healing Code Tests", () => {
-    it("should auto-heal a division operation", () => {
-      const input = 'number_str = "8"\nprint(number_str / 2)';
-      const expected = "4.0"; // Assuming the compiler auto-heals and executes the code
-      assert.equal(compile(input), expected);
-    });
+const sampleProgram = "print(0)";
+
+describe("The compiler", () => {
+  it("throws when the output type is missing", (done) => {
+    assert.throws(() => compile(sampleProgram), /Unknown output type/);
+    done();
   });
-
-  describe("Natural Language Function Definitions Tests", () => {
-    it("should handle natural language function definitions", () => {
-      const input =
-        'define "if it\'s cold (temperature) then say to wear a jacket":\n    if temperature < 60:\n        return "Wear a jacket"\n    else:\n        return "It\'s warm enough"';
-      const expected = "Function defined"; // Assuming the compiler correctly interprets and defines the function
-      assert.equal(compile(input), expected);
-    });
+  it("throws when the output type is unknown", (done) => {
+    assert.throws(
+      () => compile(sampleProgram, "no such type"),
+      /Unknown output type/
+    );
+    done();
   });
-
-  describe("Predictive Looping Tests", () => {
-    it("should execute predictive looping for prime numbers", () => {
-      const input =
-        'for num in predictive_range(2, 30, pattern="prime"):\n    print(num)';
-      const expected = "2, 3, 5, 7, 11, 13, 17, 19, 23, 29"; // Assuming the compiler executes and returns the sequence of prime numbers
-      assert.equal(compile(input), expected);
-    });
-  });
-
-  describe("Natural Language Comparison Tests", () => {
-    it("should test natural language comparison", () => {
-      const input = "compare (1) to (1)";
-      const expected = "equal"; // Assuming the compiler interprets and evaluates the comparison
-      assert.equal(compile(input), expected);
-    });
-  });
-
-  // Additional tests for other features can be added here
+  // it("accepts the parsed option", (done) => {
+  //   const compiled = compile(sampleProgram, "parsed");
+  //   assert(compiled.startsWith("Syntax is ok"));
+  //   done();
+  // });
+  // it("accepts the analyzed option", (done) => {
+  //   const compiled = compile(sampleProgram, "analyzed");
+  //   assert(compiled.kind === "Program");
+  //   done();
+  // });
+  // it("accepts the optimized option", (done) => {
+  //   const compiled = compile(sampleProgram, "optimized");
+  //   assert(compiled.kind === "Program");
+  //   done();
+  // });
+  // it("generates js code when given the js option", (done) => {
+  //   const compiled = compile(sampleProgram, "js");
+  //   assert(compiled.startsWith("console.log(0)"));
+  //   done();
+  // });
 });

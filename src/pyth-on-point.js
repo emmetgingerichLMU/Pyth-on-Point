@@ -1,45 +1,32 @@
-// Example implementation of the compile function for Pyth-on-Point
+import * as fs from "node:fs/promises";
+import stringify from "graph-stringify";
+import compile from "./compiler.js";
 
-/**
- * Compiles Pyth-on-Point code into a JavaScript equivalent or a mock response.
- * @param {string} code - The Pyth-on-Point code to compile.
- * @returns {string} The result of the compilation.
- */
-export function compile(code) {
-  // Handle natural language function definitions
-  if (code.startsWith('define "')) {
-    if (code.includes("if it's cold (temperature) then say to wear a jacket")) {
-      return "Function defined";
-    }
-  } // Closing bracket for the natural language function definition
+const help = `Pyth-On-Point compiler
 
-  // Handling the comparison statement
-  if (code.startsWith("compare")) {
-    const comparePattern = /compare \((\d+)\) to \((\d+)\)/;
-    const match = code.match(comparePattern);
+Syntax: pyth-on-point <filename> <outputType>
 
-    if (match) {
-      const num1 = parseInt(match[1], 10);
-      const num2 = parseInt(match[2], 10);
+Prints to stdout according to <outputType>, which must be one of:
 
-      return num1 === num2 ? "equal" : "not equal";
-    } else {
-      return "Comparison syntax error";
-    }
+  parsed     a message that the program was matched ok by the grammar
+  analyzed   the statically analyzed representation
+  optimized  the optimized semantically analyzed representation
+  js         the translation to JavaScript
+`;
+
+async function compileFromFile(filename, outputType) {
+  try {
+    const buffer = await fs.readFile(filename);
+    const compiled = compile(buffer.toString(), outputType);
+    console.log(stringify(compiled, "kind") || compiled);
+  } catch (e) {
+    console.error(`\u001b[31m${e}\u001b[39m`);
+    process.exitCode = 1;
   }
-
-  // Handle predictive looping
-  if (code.includes("predictive_range")) {
-    return "2, 3, 5, 7, 11, 13, 17, 19, 23, 29";
-  }
-
-  // Handle auto-healing division
-  if (code.match(/number_str = "\d+";?\s*print\(number_str \/ 2\)/)) {
-    return "4.0";
-  }
-
-  // Default response for unrecognized code
-  return "Unknown operation";
 }
 
-// If you have other functions or classes to export, define them here.
+if (process.argv.length !== 4) {
+  console.log(help);
+} else {
+  compileFromFile(process.argv[2], process.argv[3]);
+}

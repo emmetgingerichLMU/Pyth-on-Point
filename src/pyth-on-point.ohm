@@ -4,40 +4,41 @@ PythOnPoint {
   Statement       = NaturalLanguageFunctionDefinition
                   | PredictiveLoop
                   | ComparisonStatement
-                  // | (AnyOtherStatement)*
-                  | "\n"
-                       
+                  | PrintStatement
+                  | ReturnStatement
+                  | YieldStatement
+
   NaturalLanguageFunctionDefinition
-                   = "define" "\"" FunctionName "(" Parameters ")" "then" FunctionBody "\""
+                  = "define" FunctionName "(" Parameters ")" "then" FunctionBody
                    
   PredictiveLoop  = "for" variable "in" PredictiveRange "(" RangeParams ")" "{" LoopBody "}"
   
-  ComparisonStatement = "compare" Expression "to" Expression
+  ComparisonStatement
+                  = "compare" Expression "to" Expression
+
+  PrintStatement  = "print" Expression
+  ReturnStatement = "return" Expression
+  YieldStatement  = "yield" Expression
 
   FunctionName    = letter+
-  Parameters      = Parameter ("," Parameter)*
+  Parameters      = ListOf<Parameter, ",">
   Parameter       = variable
   FunctionBody    = Statement+
 
   PredictiveRange = "predictive_range"
-  RangeParams     = number "," number "," "pattern" "=" PatternType
-  PatternType     = "\"" ("prime" ) "\""
+  RangeParams     = number "," number "," PatternType
+  PatternType     = "prime" | "fibonacci" | "factorial"
   LoopBody        = Statement+
 
-  Expression       = number
-                   | string
-                   | variable
-                   | "(" Expression ")"               --parens
-                   | Expression binaryOp Expression   --binary
+  Expression      = Expression binaryOp Expression   --binary
+                  | number
+                  | string
+                  | variable
+                  | "(" Expression ")"               --parens
 
   number          = digit+
   string          = "\"" letter+ "\""
   variable        = letter+
   binaryOp        = "+" | "-" | "*" | "/" | "and" | "or"
-  
-  // AnyOtherStatement = (letter | digit | punctuation | space)+
-  // AnyOtherOperation = (letter | digit | punctuation | space)+
-  // AnyOtherPattern   = (letter | digit | punctuation | space)+
-  
 }
 

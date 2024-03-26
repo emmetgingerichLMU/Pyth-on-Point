@@ -1,11 +1,17 @@
-// src/compiler.js
-import { parse } from "./parser.js";
-import { analyze } from "./analyzer.js";
-import { generate } from "./generator.js"; // Assuming a code generation step
+import parse from "./parser.js";
+import analyze from "./analyzer.js";
+import optimize from "./optimizer.js";
+import generate from "./generator.js";
 
-export function compile(sourceCode) {
-  const ast = parse(sourceCode);
-  const analyzedAst = analyze(ast);
-  const outputCode = generate(analyzedAst); // Generate target code from the analyzed AST
-  return outputCode;
+export default function compile(source, outputType) {
+  if (!["parsed", "analyzed", "optimized", "js"].includes(outputType)) {
+    throw new Error("Unknown output type");
+  }
+  const match = parse(source);
+  if (outputType === "parsed") return "Syntax is ok";
+  const analyzed = analyze(match);
+  if (outputType === "analyzed") return analyzed;
+  const optimized = optimize(analyzed);
+  if (outputType === "optimized") return optimized;
+  return generate(optimized);
 }

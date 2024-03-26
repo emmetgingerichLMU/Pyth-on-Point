@@ -1,84 +1,71 @@
-import { expect } from "chai";
-import Analyzer from "../src/analyzer.js";
+import assert from "node:assert/strict";
+import parse from "../src/parser.js"; // Assuming you have a parsing mechanism
+import analyze from "../src/analyzer.js";
+import {
+  program,
+  naturalLanguageFunctionDefinition,
+  variable,
+  printStatement,
+  binaryExpression,
+  stringLiteral,
+  predictiveLoop,
+  predictiveRange,
+  comparisonStatement,
+} from "../src/core.js";
 
-describe("Syntax Analysis Tests", () => {
-  let analyzer;
+// Semantic checks for PythOnPoint language
+const semanticChecks = [
+  ["print statements", 'print "Hello PythOnPoint!"'],
+  [
+    "natural language function definition",
+    'define greet(name) then print "Hello " + name',
+  ],
+  ["predictive loop", "for x in predictive_range(1, 10, prime) { print(x); }"],
+  ["comparison statement", "compare 1 to 2"],
+  // Add more checks as needed for your language features
+];
 
-  beforeEach(() => {
-    analyzer = new Analyzer();
+// Programs with expected semantic errors
+const semanticErrors = [
+  ["undeclared variable in print", "print x", /Identifier x not declared/],
+  [
+    "misused natural language keyword",
+    'define greet 123 then print "Oops!"',
+    /Expected a variable name/,
+  ],
+  [
+    "invalid predictive loop range",
+    'for x in predictive_range("one", "ten", "prime") { print(x); }',
+    /Expected an integer/,
+  ],
+  // Add more error checks as needed for your language features
+];
+
+describe("The analyzer for PythOnPoint", () => {
+  for (const [scenario, source] of semanticChecks) {
+    it(`correctly analyzes ${scenario}`, () => {
+      // Assuming `parse` returns an AST directly suitable for analysis in this example
+      const ast = parse(source); // Implement parse function based on your setup
+      assert.doesNotThrow(() => analyze(ast));
+    });
+  }
+
+  for (const [scenario, source, errorMessagePattern] of semanticErrors) {
+    it(`detects error for ${scenario}`, () => {
+      const ast = parse(source); // Implement parse function based on your setup
+      assert.throws(() => analyze(ast), errorMessagePattern);
+    });
+  }
+
+  it("produces the expected representation for a simple print statement", () => {
+    const source = 'print "Hello, PythOnPoint!"';
+    const ast = parse(source); // Implement parse function based on your setup
+    const analyzedAst = analyze(ast);
+    assert.deepEqual(
+      analyzedAst,
+      program([printStatement(stringLiteral("Hello, PythOnPoint!"))])
+    );
   });
 
-  it("handles AutoHealingStatement with convertible types", () => {
-    const ast = {
-      type: "AutoHealingStatement",
-      left: { type: "Literal", value: "100", dataType: "string" },
-      right: { type: "Literal", value: 2, dataType: "number" },
-    };
-    expect(() => analyzer.visitAutoHealingStatement(ast)).not.to.throw();
-  });
-
-  it("throws on AutoHealingStatement with non-convertible types", () => {
-    const ast = {
-      type: "AutoHealingStatement",
-      left: { type: "Literal", value: "not a number", dataType: "string" },
-      right: { type: "Literal", value: 2, dataType: "number" },
-    };
-    expect(() => analyzer.visitAutoHealingStatement(ast)).to.throw();
-  });
-
-  it("validates NaturalLanguageFunctionDefinition without duplicate parameters", () => {
-    const ast = {
-      type: "NaturalLanguageFunctionDefinition",
-      parameters: [{ name: "temperature", dataType: "number" }],
-      body: [],
-    };
-    expect(() =>
-      analyzer.visitNaturalLanguageFunctionDefinition(ast)
-    ).not.to.throw();
-  });
-
-  it("throws on NaturalLanguageFunctionDefinition with duplicate parameters", () => {
-    const ast = {
-      type: "NaturalLanguageFunctionDefinition",
-      parameters: [
-        { name: "temperature", dataType: "number" },
-        { name: "temperature", dataType: "number" },
-      ],
-      body: [],
-    };
-    expect(() =>
-      analyzer.visitNaturalLanguageFunctionDefinition(ast)
-    ).to.throw();
-  });
-
-  it("accepts valid PredictiveLoop", () => {
-    const ast = {
-      type: "PredictiveLoop",
-      start: { type: "Literal", value: 1, dataType: "number" },
-      end: { type: "Literal", value: 10, dataType: "number" },
-      pattern: { type: "Literal", value: "prime", dataType: "string" },
-      body: [],
-    };
-    expect(() => analyzer.visitPredictiveLoop(ast)).not.to.throw();
-  });
-
-  it("validates ComparisonStatement with compatible types", () => {
-    const ast = {
-      type: "ComparisonStatement",
-      left: { type: "Literal", value: 10, dataType: "number" },
-      right: { type: "Literal", value: 10, dataType: "number" },
-    };
-    expect(() => analyzer.visitComparisonStatement(ast)).not.to.throw();
-  });
-
-  it("throws on ComparisonStatement with incompatible types", () => {
-    const ast = {
-      type: "ComparisonStatement",
-      left: { type: "Literal", value: "10", dataType: "string" },
-      right: { type: "Literal", value: 10, dataType: "number" },
-    };
-    expect(() => analyzer.visitComparisonStatement(ast)).to.throw();
-  });
-
-  // Additional tests as needed for other features and edge cases
+  // Additional specific representation tests as needed...
 });

@@ -9,7 +9,7 @@ PythOnPoint {
                   | YieldStatement
 
   NaturalLanguageFunctionDefinition
-                  = "define" FunctionName "(" Parameters ")" "then" FunctionBody
+                  = "define" functionName "(" Parameters ")" "then" FunctionBody
                    
   PredictiveLoop  = "for" variable "in" PredictiveRange "(" RangeParams ")" "{" LoopBody "}"
   
@@ -20,7 +20,7 @@ PythOnPoint {
   ReturnStatement = "return" Expression
   YieldStatement  = "yield" Expression
 
-  FunctionName    = letter+
+  functionName    = alnum+
   Parameters      = ListOf<Parameter, ",">
   Parameter       = variable
   FunctionBody    = Statement+
@@ -37,8 +37,8 @@ PythOnPoint {
                   | "(" Expression ")"               --parens
 
   number          = digit+
-  string          = "\"" letter+ "\""
-  variable        = letter+
+  string          = "\"" (~"\"" any)* "\""
+  variable        = alnum+
   binaryOp        = "+" | "-" | "*" | "/" | "and" | "or"
 }
 

@@ -329,7 +329,6 @@ export default function analyze(match) {
       return core.yieldStatement(expr);
     },
     FunctionBody(statement) {
-      console.log(statement);
       return statement.asIteration().children.map((s) => s.rep());
     },
     // Define representations for other constructs as necessary.

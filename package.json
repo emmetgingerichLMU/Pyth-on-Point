@@ -17,6 +17,7 @@
     "mocha": "^10.2.0"
   },
   "dependencies": {
+    "graph-stringify": "^1.1.0",
     "ohm-js": "^17.1.0"
   },
   "directories": {

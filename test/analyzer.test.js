@@ -31,7 +31,7 @@ const semanticErrors = [
   [
     "misused natural language keyword",
     "define greet(name) then print nombre",
-    /Expected a variable name/,
+    /Identifier nombre not declared/,
   ],
   [
     "invalid predictive loop range",

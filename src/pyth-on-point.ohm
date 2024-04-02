@@ -1,13 +1,17 @@
 PythOnPoint {
   Program         = Statement+
 
-  Statement       = NaturalLanguageFunctionDefinition
+  Statement       = VariableDeclaration
+                  | NaturalLanguageFunctionDefinition
                   | PredictiveLoop
                   | ComparisonStatement
                   | PrintStatement
                   | ReturnStatement
                   | YieldStatement
   
+  VariableDeclaration 
+                  = "let" variable "=" Expression
+
   NaturalLanguageFunctionDefinition
                   = "define" functionName "(" Parameters ")" "then" FunctionBody
                    
@@ -32,7 +36,7 @@ PythOnPoint {
   Expression      = Expression binaryOp Expression   --binary
                   | number
                   | string
-                  | variable
+                  | variable                         --use
                   | "(" Expression ")"               --parens
 
   number          = digit+

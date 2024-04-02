@@ -274,6 +274,14 @@ export default function analyze(match) {
     Program(statements) {
       return core.program(statements.children.map((s) => s.rep()));
     },
+
+    VariableDeclaration(_let, id, _equal, expression) {
+      const name = id.sourceString;
+      mustNotAlreadyBeDeclared(name, { at: id });
+      const value = expression.rep();
+      context.add(name, core.variable(name));
+    },
+
     NaturalLanguageFunctionDefinition(
       _define,
       functionName,
@@ -343,9 +351,13 @@ export default function analyze(match) {
     string(_open, chars, _close) {
       return core.stringLiteral(chars.sourceString);
     },
-    variable(name) {
-      const varName = name.sourceString;
-      // Here, you might want to look up the variable in the context to ensure it's defined
+    variable(chars) {
+      return chars.sourceString;
+    },
+    Expression_use(id) {
+      const varName = id.sourceString;
+      const entity = context.lookup(varName);
+      mustHaveBeenFound(entity, varName, { at: id });
       return core.variable(varName);
     },
     Expression_binary(expression1, op, expression2) {

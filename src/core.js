@@ -1,3 +1,10 @@
+export const boolType = { kind: "BoolType" };
+export const intType = { kind: "IntType" };
+export const floatType = { kind: "FloatType" };
+export const stringType = { kind: "StringType" };
+export const voidType = { kind: "VoidType" };
+export const anyType = { kind: "AnyType" };
+
 export function program(statements) {
   return { kind: "Program", statements };
 }
@@ -21,16 +28,15 @@ export function fun(name, type) {
   return { kind: "Function", name, type };
 }
 
-export function predictiveLoop(variable, rangeParams, loopBody) {
+export function predictiveLoop(iterator, number1, number2, loopBody) {
   return {
     kind: "PredictiveLoop",
-    variable,
-    rangeParams,
+    iterator,
+    number1,
+    number2,
     loopBody,
   };
 }
-
-export const standardLibrary = Object.freeze({});
 
 export function comparisonStatement(expression1, expression2) {
   return { kind: "ComparisonStatement", expression1, expression2 };
@@ -63,8 +69,15 @@ export function expression(type, ...args) {
   return { kind: "Expression", type, args };
 }
 
-export function predictiveRange(start, end, patternType) {
-  return { kind: "PredictiveRange", start, end, patternType };
+export function predictiveRange(iterator, number1, number2, patternType, body) {
+  return {
+    kind: "PredictiveRange",
+    iterator,
+    number1,
+    number2,
+    patternType,
+    body,
+  };
 }
 
 // Define additional constructs here as needed.
@@ -88,3 +101,20 @@ export function variableDeclaration(variable, initializer) {
 }
 
 // Add additional utility functions as necessary to support the full range of your grammar.
+export const standardLibrary = Object.freeze({
+  int: intType,
+  float: floatType,
+  boolean: boolType,
+  string: stringType,
+  void: voidType,
+  any: anyType,
+  /*π: variable("π", true, floatType),
+  print: fun("print", anyToVoidType),
+  sin: fun("sin", floatToFloatType),
+  cos: fun("cos", floatToFloatType),
+  exp: fun("exp", floatToFloatType),
+  ln: fun("ln", floatToFloatType),
+  hypot: fun("hypot", floatFloatToFloatType),
+  bytes: fun("bytes", stringToIntsType),
+  codepoints: fun("codepoints", stringToIntsType),*/
+});

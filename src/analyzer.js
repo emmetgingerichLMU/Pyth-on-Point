@@ -1,5 +1,13 @@
 import * as core from "./core.js";
 
+// A few declarations to save typing
+const INT = core.intType;
+const FLOAT = core.floatType;
+const STRING = core.stringType;
+const BOOLEAN = core.boolType;
+const ANY = core.anyType;
+const VOID = core.voidType;
+
 class Context {
   // Like most statically-scoped languages, Carlos contexts will contain a
   // map for their locally declared identifiers and a reference to the parent
@@ -306,16 +314,28 @@ export default function analyze(match) {
       variable,
       _in,
       _predictiveRangeWithOpenP,
-      rangeParams,
+      number1,
+      _comma1,
+      number2,
+      _comma2,
+      patternType,
       _closeP,
       _openB,
       loopBody,
       _closeB
     ) {
-      const varName = variable.sourceString;
-      const rangePars = rangeParams.rep();
+      const [low, high] = [
+        Number(number1.sourceString),
+        Number(number2.sourceString),
+      ];
+      mustHaveIntegerType(low, { at: number1 });
+      mustHaveIntegerType(high, { at: number2 });
+      const iterator = core.variable(variable.sourceString, INT, true);
+      context = context.newChildContext({ inLoop: true });
+      context.add(variable.sourceString, iterator);
       const body = loopBody.rep();
-      return core.predictiveLoop(varName, rangePars, body);
+      context = context.parent;
+      return core.predictiveRange(iterator, low, high, patternType, body);
     },
     ComparisonStatement(_compare, expression1, _to, expression2) {
       const expr1 = expression1.rep();

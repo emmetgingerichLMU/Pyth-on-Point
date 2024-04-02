@@ -15,7 +15,7 @@ PythOnPoint {
   NaturalLanguageFunctionDefinition
                   = "define" functionName "(" Parameters ")" "then" FunctionBody
                    
-  PredictiveLoop  = "for" variable "in" "predictive_range(" RangeParams ")" "{" LoopBody "}"
+  PredictiveLoop  = "for" variable "in" "predictive_range(" number1 "," number2 "," patternType ")" "{" LoopBody "}"
   
   ComparisonStatement
                   = "compare" Expression "to" Expression
@@ -29,7 +29,7 @@ PythOnPoint {
   Parameter       = variable
   FunctionBody    = Statement+
 
-  RangeParams     = number "," number "," patternType
+  RangeParams     = number1 "," number2 "," patternType
   patternType     = "prime" | "fibonacci" | "factorial"
   LoopBody        = Statement+
 
@@ -40,6 +40,8 @@ PythOnPoint {
                   | "(" Expression ")"               --parens
 
   number          = digit+
+  number1         = digit+
+  number2         = digit+
   string          = "\"" (~"\"" any)* "\""
   variable        = alnum+
   binaryOp        = "+" | "-" | "*" | "/" | "and" | "or"

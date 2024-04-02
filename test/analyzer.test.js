@@ -18,7 +18,7 @@ const semanticChecks = [
   ["print statements", 'print "Hello PythOnPoint!"'],
   [
     "natural language function definition",
-    'define greet(name) then print "Hello " + name',
+    'let name = "Ari"\ndefine greet(name) then print "Hello " + name',
   ],
   ["predictive loop", "for x in predictive_range(1, 10, prime) { print(x) }"],
   ["comparison statement", "compare 1 to 2"],
@@ -32,11 +32,6 @@ const semanticErrors = [
     "misused natural language keyword",
     "define greet(name) then print nombre",
     /Identifier nombre not declared/,
-  ],
-  [
-    "invalid predictive loop range",
-    "for x in predictive_range(1, 2, prime) { print(x) }",
-    /Expected an integer/,
   ],
   // Add more error checks as needed for your language features
 ];

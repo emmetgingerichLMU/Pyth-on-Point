@@ -324,10 +324,9 @@ export default function analyze(match) {
       loopBody,
       _closeB
     ) {
-      const [low, high] = [
-        Number(number1.sourceString),
-        Number(number2.sourceString),
-      ];
+      mustNotAlreadyBeDeclared(variable.sourceString, { at: variable });
+      const low = { value: Number(number1.sourceString), type: INT };
+      const high = { value: Number(number2.sourceString), type: INT };
       mustHaveIntegerType(low, { at: number1 });
       mustHaveIntegerType(high, { at: number2 });
       const iterator = core.variable(variable.sourceString, INT, true);

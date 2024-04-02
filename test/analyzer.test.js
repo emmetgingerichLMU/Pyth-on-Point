@@ -35,7 +35,7 @@ const semanticErrors = [
   ],
   [
     "invalid predictive loop range",
-    'for x in predictive_range("one", "ten", "prime") { print(x); }',
+    "for x in predictive_range(1, 2, prime) { print(x) }",
     /Expected an integer/,
   ],
   // Add more error checks as needed for your language features

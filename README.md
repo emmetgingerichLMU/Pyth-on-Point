@@ -19,15 +19,11 @@ Pyth-On Point allows for One-Liner Functions to be defined in a natural language
 
 # Example code snippet:
 
-# Natural Language Function Definitions
+# One liner Function Definitions
 ```
-define "if it's cold (temperature) then say to wear a jacket":
-    if temperature < 60:
-        return "Wear a jacket"
-    else:
-        return "It's warm enough"
+let name = "Ari"
+define greet(name) then print "Hello " + name'
 
-print("if it's cold (55) then say to wear a jacket")  // Output: "Wear a jacket"
 ```
 ![DALL·E 2024-01-24 12 59 15 - Design a sleek and modern logo for a fictional programming language called 'Pyth-On Point'  The logo should visually represent the concept of being co](https://github.com/emmetgingerichLMU/Pyth-on-Point/assets/16505410/8e6b66bd-ca34-4ed7-b1e7-73bb6151add6)
 

@@ -1,5 +1,3 @@
-# Auto-Healing Code Example
-
-number_str = "8"
-print(number_str / 2)  # Auto-heals the code by fixing the operation, Output: 4.0
+let numstr = "8"
+print(numstr / 2)
 

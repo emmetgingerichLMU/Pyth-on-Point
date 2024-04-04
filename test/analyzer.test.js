@@ -17,7 +17,7 @@ import {
 const semanticChecks = [
   ["print statements", 'print "Hello PythOnPoint!"'],
   [
-    "natural language function definition",
+    "one liner function definition",
     'let name = "Ari"\ndefine greet(name) then print "Hello " + name',
   ],
   ["predictive loop", "for x in predictive_range(1, 10, prime) { print(x) }"],

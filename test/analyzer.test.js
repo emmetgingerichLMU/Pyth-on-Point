@@ -22,6 +22,11 @@ const semanticChecks = [
   ],
   ["predictive loop", "for x in predictive_range(1, 10, prime) { print(x) }"],
   ["comparison statement", "compare 1 to 2"],
+  [
+    "yield in a for-loop",
+    "for x in predictive_range(1, 10, prime) { yield x }",
+  ],
+  ["return in a function", "define greet(name) then return 1"],
   // Add more checks as needed for your language features
 ];
 
@@ -34,6 +39,8 @@ const semanticErrors = [
     /Identifier nombre not declared/,
   ],
   // Add more error checks as needed for your language features
+  ["yield not in a for-loop", "yield 1", /Yield can only/],
+  ["return not in function", "return 1", /Return can only/],
 ];
 
 describe("The analyzer for PythOnPoint", () => {

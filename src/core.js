@@ -54,10 +54,6 @@ export function yieldStatement(expression) {
   return { kind: "YieldStatement", expression };
 }
 
-export function rangeParams(start, end, patternType) {
-  return { kind: "RangeParams", start, end, patternType };
-}
-
 export function variable(name) {
   return { kind: "Variable", name };
 }

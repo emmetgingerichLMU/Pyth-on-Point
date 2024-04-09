@@ -29,7 +29,6 @@ PythOnPoint {
   Parameter       = variable
   FunctionBody    = Statement+
 
-  RangeParams     = number1 "," number2 "," patternType
   patternType     = "prime" | "fibonacci" | "factorial"
   LoopBody        = Statement+
 

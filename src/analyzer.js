@@ -244,7 +244,7 @@ export default function analyze(match) {
   }
 
   function mustBeInLoop(at) {
-    must(context.inLoop, "Break can only appear in a loop", at);
+    must(context.inLoop, "Yield can only appear in a loop", at);
   }
 
   function mustBeInAFunction(at) {
@@ -347,10 +347,12 @@ export default function analyze(match) {
     },
     ReturnStatement(_return, expression) {
       const expr = expression.rep();
+      mustBeInAFunction({ at: _return });
       return core.returnStatement(expr);
     },
     YieldStatement(_yield, expression) {
       const expr = expression.rep();
+      mustBeInLoop({ at: _yield });
       return core.yieldStatement(expr);
     },
     FunctionBody(statement) {
@@ -358,9 +360,6 @@ export default function analyze(match) {
     },
     LoopBody(statement) {
       return statement.children.map((s) => s.rep());
-    },
-    RangeParams(start, _comma1, end, _comma2, patternType) {
-      return core.rangeParams(start.rep(), end.rep(), patternType.sourceString);
     },
     // Define representations for other constructs as necessary.
     // This includes mapping grammar rules for expressions and literals.

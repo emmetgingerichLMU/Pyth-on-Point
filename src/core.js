@@ -90,8 +90,8 @@ export function numberLiteral(value, type) {
   return { kind: "NumberLiteral", value, type };
 }
 
-export function stringLiteral(value) {
-  return { kind: "StringLiteral", value };
+export function stringLiteral(value, type) {
+  return { kind: "StringLiteral", value, type };
 }
 
 export function binaryExpression(op, left, right) {

@@ -33,7 +33,6 @@ PythOnPoint {
                   | string
   FunctionBody    = Statement+
 
-  RangeParams     = number "," number "," patternType
   patternType     = "prime" | "fibonacci" | "factorial"
   LoopBody        = Statement+
 

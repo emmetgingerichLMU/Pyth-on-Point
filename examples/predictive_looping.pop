@@ -1,5 +1,4 @@
-# Predictive Looping Example: Prime Number Generator
-for num in predictive_range(2, 30, pattern="prime"):
+for num in predictive_range(2, 30, prime){
     print(num)
-# Output: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29
+}
 

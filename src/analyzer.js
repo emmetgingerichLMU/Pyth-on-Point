@@ -429,7 +429,7 @@ export default function analyze(match) {
       const varName = id.sourceString;
       const entity = context.lookup(varName);
       mustHaveBeenFound(entity, varName, { at: id });
-      return core.variable(varName);
+      return entity;
     },
     VariableDeclaration(_let, id, _equal, expression) {
       const name = id.sourceString;

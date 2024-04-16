@@ -283,11 +283,40 @@ export default function analyze(match) {
       return core.program(statements.children.map((s) => s.rep()));
     },
 
-    VariableDeclaration(_let, id, _equal, expression) {
-      const name = id.sourceString;
-      mustNotAlreadyBeDeclared(name, { at: id });
-      const value = expression.rep();
-      context.add(name, core.variable(name));
+    FunctionStatement(functionName, _open, args, _close) {
+      const funName = functionName.sourceString;
+      const fun = context.lookup(funName);
+      mustHaveBeenFound(fun, funName, { at: functionName });
+      mustBeCallable(fun, { at: functionName });
+      const argReps = args.asIteration().children.map((a) => a.rep());
+      if (fun.kind === "Function") {
+        mustHaveCorrectArgumentCount(
+          argReps.length,
+          fun.type.paramTypes.length,
+          {
+            at: args,
+          }
+        );
+        argReps.forEach((arg, i) => {
+          mustBeAssignable(
+            arg,
+            { toType: fun.type.paramTypes[i] },
+            { at: args }
+          );
+        });
+        return core.callExpression(fun, argReps);
+      } else {
+        // Handle struct constructor calls if necessary
+        // ...
+      }
+    },
+
+    _iter(...children) {
+      return children.map((child) => child.rep());
+    },
+
+    functionName(name) {
+      return name.sourceString;
     },
 
     NaturalLanguageFunctionDefinition(
@@ -299,15 +328,32 @@ export default function analyze(match) {
       _then,
       functionBody
     ) {
-      const fun = core.fun(functionName.sourceString);
-      mustNotAlreadyBeDeclared(functionName.sourceString, { at: functionName });
-      context.add(functionName.sourceString, fun);
       const name = functionName.sourceString;
+      const fun = core.fun(name);
+      mustNotAlreadyBeDeclared(name, { at: functionName });
+      context.add(name, fun);
+
       context = context.newChildContext({ inLoop: false, function: fun });
-      const params = parameters.asIteration().children.map((p) => p.rep());
+      const paramNames = parameters
+        .asIteration()
+        .children.map((p) => p.sourceString);
+      paramNames.forEach((paramName) => {
+        const param = core.variable(paramName);
+        context.add(paramName, param);
+      });
+
       const body = functionBody.rep();
       context = context.parent;
-      return core.naturalLanguageFunctionDefinition(name, params, body, fun);
+
+      fun.paramNames = paramNames;
+      fun.body = body;
+
+      return core.naturalLanguageFunctionDefinition(
+        name,
+        paramNames,
+        body,
+        fun
+      );
     },
     PredictiveLoop(
       _for,
@@ -343,7 +389,14 @@ export default function analyze(match) {
     },
     PrintStatement(_print, expression) {
       const expr = expression.rep();
-      return core.printStatement(expr);
+      if (expr.kind === "Variable") {
+        const varName = expr.name;
+        const entity = context.lookup(varName);
+        mustHaveBeenFound(entity, varName, { at: expression });
+        return core.printStatement(entity);
+      } else {
+        return core.printStatement(expr);
+      }
     },
     ReturnStatement(_return, expression) {
       const expr = expression.rep();
@@ -365,10 +418,10 @@ export default function analyze(match) {
     // Define representations for other constructs as necessary.
     // This includes mapping grammar rules for expressions and literals.
     number(_digits) {
-      return core.numberLiteral(parseInt(_digits.sourceString, 10));
+      return core.numberLiteral(parseInt(_digits.sourceString, 10), INT);
     },
     string(_open, chars, _close) {
-      return core.stringLiteral(chars.sourceString);
+      return core.stringLiteral(chars.sourceString, STRING);
     },
     variable(chars) {
       return chars.sourceString;
@@ -379,11 +432,61 @@ export default function analyze(match) {
       mustHaveBeenFound(entity, varName, { at: id });
       return core.variable(varName);
     },
+    VariableDeclaration(_let, id, _equal, expression) {
+      const name = id.sourceString;
+      mustNotAlreadyBeDeclared(name, { at: id });
+      const value = expression.rep();
+      const variable = core.variable(name, value.type);
+      context.add(name, variable);
+      return core.variableDeclaration(variable, value);
+    },
+
     Expression_binary(expression1, op, expression2) {
       const left = expression1.rep();
       const right = expression2.rep();
       const operator = op.sourceString;
-      return core.binaryExpression(operator, left, right);
+
+      if (
+        operator === "+" ||
+        operator === "-" ||
+        operator === "*" ||
+        operator === "/"
+      ) {
+        if (
+          operator === "+" &&
+          (left.type === STRING || right.type === STRING)
+        ) {
+          //STRING = String(left) + String(right);
+          return core.binaryExpression(operator, left, right, STRING);
+        } else {
+          if (left.kind === "Variable") {
+            console.log("TYPE AND KIND OF STRING::", left.type, left.kind);
+            const varName = left.name;
+            const entity = context.lookup(varName);
+            mustHaveBeenFound(entity, varName, { at: expression1 });
+            mustHaveNumericType(entity, { at: expression1 });
+          } else {
+            mustHaveNumericType(left, { at: expression1 });
+          }
+          if (right.kind === "Variable") {
+            const varName = right.name;
+            const entity = context.lookup(varName);
+            mustHaveBeenFound(entity, varName, { at: expression2 });
+            mustHaveNumericType(entity, { at: expression2 });
+          } else {
+            mustHaveNumericType(right, { at: expression2 });
+          }
+          const resultType =
+            left.type === INT && right.type === INT ? INT : FLOAT;
+          return core.binaryExpression(operator, left, right, resultType);
+        }
+      } else if (operator === "and" || operator === "or") {
+        mustHaveBooleanType(left, { at: expression1 });
+        mustHaveBooleanType(right, { at: expression2 });
+        return core.binaryExpression(operator, left, right, BOOLEAN);
+      } else {
+        throw new Error(`Invalid binary operator: ${operator}`);
+      }
     },
     // Continue defining rep operations for other grammar rules as needed.
     Expression_parens(_open, expression, _close) {

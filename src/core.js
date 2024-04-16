@@ -9,23 +9,22 @@ export function program(statements) {
   return { kind: "Program", statements };
 }
 
-export function naturalLanguageFunctionDefinition(
-  functionName,
-  parameters,
-  functionBody,
-  fun
-) {
-  return {
-    kind: "NaturalLanguageFunctionDefinition",
-    functionName,
-    parameters,
-    functionBody,
-    fun,
-  };
+export function fun(name) {
+  return { kind: "Function", name };
 }
 
-export function fun(name, type) {
-  return { kind: "Function", name, type };
+export function functionDeclaration(fun, params, body) {
+  return { kind: "FunctionDeclaration", fun, params, body };
+}
+
+export function naturalLanguageFunctionDefinition(name, paramNames, body, fun) {
+  return {
+    kind: "NaturalLanguageFunctionDefinition",
+    name,
+    paramNames,
+    body,
+    fun,
+  };
 }
 
 export function predictiveLoop(iterator, number1, number2, loopBody) {
@@ -58,8 +57,12 @@ export function rangeParams(start, end, patternType) {
   return { kind: "RangeParams", start, end, patternType };
 }
 
-export function variable(name) {
-  return { kind: "Variable", name };
+export function variable(name, type) {
+  return { kind: "Variable", name, type };
+}
+
+export function callExpression(callee, args) {
+  return { kind: "CallExpression", callee, args };
 }
 
 export function expression(type, ...args) {
@@ -83,8 +86,8 @@ export function predictiveRange(iterator, number1, number2, patternType, body) {
 // Define additional constructs here as needed.
 
 // Example for literals and binary operations, adjust as necessary.
-export function numberLiteral(value) {
-  return { kind: "NumberLiteral", value };
+export function numberLiteral(value, type) {
+  return { kind: "NumberLiteral", value, type };
 }
 
 export function stringLiteral(value) {

@@ -8,28 +8,32 @@ PythOnPoint {
                   | PrintStatement
                   | ReturnStatement
                   | YieldStatement
+                  | FunctionStatement
   
   VariableDeclaration 
                   = "let" variable "=" Expression
 
   NaturalLanguageFunctionDefinition
-                  = "define" functionName "(" Parameters ")" "then" FunctionBody
+                  = "define" functionName "(" Parameters ")" "then" FunctionBody 
                    
-  PredictiveLoop  = "for" variable "in" "predictive_range(" number1 "," number2 "," patternType ")" "{" LoopBody "}"
+  PredictiveLoop  = "for" variable "in" "predictive_range(" number "," number "," patternType ")" "{" LoopBody "}"
   
   ComparisonStatement
                   = "compare" Expression "to" Expression
 
-  PrintStatement  = "print" Expression
+  PrintStatement  = "print" (FunctionStatement | Expression)
   ReturnStatement = "return" Expression
   YieldStatement  = "yield" Expression
+  FunctionStatement = functionName "(" Parameters ")"
 
   functionName    = alnum+
   Parameters      = ListOf<Parameter, ",">
-  Parameter       = variable
+  Parameter       = variable "=" literal --default
+                  | variable 
+                  | string
   FunctionBody    = Statement+
 
-  RangeParams     = number1 "," number2 "," patternType
+  RangeParams     = number "," number "," patternType
   patternType     = "prime" | "fibonacci" | "factorial"
   LoopBody        = Statement+
 
@@ -40,10 +44,9 @@ PythOnPoint {
                   | "(" Expression ")"               --parens
 
   number          = digit+
-  number1         = digit+
-  number2         = digit+
   string          = "\"" (~"\"" any)* "\""
   variable        = alnum+
-  binaryOp        = "+" | "-" | "*" | "/" | "and" | "or"
+  binaryOp        = "+" | "-" | "*" | "/" | "and" | "or" | "%"
+  literal = number | string
 }
 

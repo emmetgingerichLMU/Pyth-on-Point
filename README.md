@@ -1,10 +1,17 @@
 Ariel Kanevsky, Alex Gordon, Nico Meiswinkel
 
+Ariel- the prodigious CS talent, envisions world domination through his unparalleled software prowess, crafting programs that transcend boundaries.
+
+Alex- an avant-garde visionary, pushes the boundaries of Pyth-on-point, pioneering innovations that redefine the landscape of programming.
+
+Nico- a mysterious figure shrouded in enigma, harnesses the power of silence, his cryptic demeanor hinting at untold depths of knowledge and potential.
+
 # Pyth-on-Point
 
 https://emmetgingerichlmu.github.io/Pyth-on-Point/
 
-In the vibrant tech hub of Silicon Shores, a team of visionary programmers created Pyth-On Point, a language that redefined coding. Drawing inspiration from Python's simplicity, Pyth-On Point introduced groundbreaking features like AutoType Variables for intuitive type inference, One-Liner Functions for succinct code, Enhanced List Comprehensions for powerful data manipulation, Smart Loops for pattern-optimized iterations, and Implicit Error Handling for seamless debugging. This language quickly gained acclaim for making programming more accessible, efficient, and elegant. Pyth-On Point didn't just change how people wrote code; it transformed how they approached programming, fostering a community that valued clarity and innovation, thereby democratizing the world of software development.
+
+  In the bustling tech haven of Silicon Shores, Ariel, Alex, and Nico, the formidable trio behind Pyth-On Point, embarked on a quest to revolutionize coding as we know it. With Ariel's unparalleled CS acumen steering the ship, they meticulously crafted Pyth-On Point, infusing it with groundbreaking features that transcended the limitations of traditional programming languages. Alex's visionary creativity breathed life into each line of code, as they introduced game-changing elements like AutoType Variables, One-Liner Functions, Enhanced List Comprehensions, Smart Loops, and Implicit Error Handling, seamlessly weaving simplicity and power into the fabric of Pyth-On Point. Their creation didn't just stop at innovation; it sparked a movement. Pyth-On Point became more than a language; it became a symbol of accessibility, efficiency, and elegance in programming. Their work didn't just shape lines of code; it shaped minds, fostering a global community united by a shared passion for clarity and innovation, ultimately democratizing the world of software development.
 
 
 # Python vs Pyth-on-Point:

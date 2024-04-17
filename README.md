@@ -1,4 +1,4 @@
-Ariel Kanevsky, Alex Gordon, Emmet Gingerich, Nico Meiswinkel
+Ariel Kanevsky, Alex Gordon, Nico Meiswinkel
 
 # Pyth-on-Point
 
